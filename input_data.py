@@ -128,7 +128,7 @@ def gen_label(dataframe,col_name):
   return dense_to_one_hot(dataframe[col_name],num_classes=5)
 
 
-def read_data_sets_modified(dataframe, fake_data=False, one_hot=False):
+def read_data_sets_modified(train_data,test_data, fake_data=False, one_hot=False):
   class DataSets(object):
     pass
   data_sets = DataSets()
@@ -145,14 +145,16 @@ def read_data_sets_modified(dataframe, fake_data=False, one_hot=False):
   VALIDATION_SIZE = 15
   print('Extracting')  
   # split into train and test dataset
-  msk = numpy.random.rand(len(dataframe)) < 0.8;
-  train_set = dataframe[msk];
-  test_set= dataframe[~msk];
+
+  train_set = train_data;
+  test_set=test_data;
+    
   train_images = gen_image_modified(train_set,'Image_Normalized');
   train_labels = gen_label(train_set,'Class_2');
+    
   test_images = gen_image_modified(test_set,'Image_Normalized');
-  test_labels = gen_label(test_set,'Class_2');  
-  
+  test_labels = gen_label(test_set,'Class_2');
+    
   validation_images = train_images[:VALIDATION_SIZE]
   validation_labels = train_labels[:VALIDATION_SIZE]
 
