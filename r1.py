@@ -7,10 +7,10 @@ accur = []
 iter = []
 
 print "Loading data"
-dat=pd.read_pickle('document_image');
+train_dat=pd.read_pickle('td_set');
+test_dat=pd.read_pickle('ts_set');
 
-
-mni=input_data.read_data_sets_modified(dat)
+mni=input_data.read_data_sets_modified(train_dat,test_dat)
 
 
 import tensorflow as tf
@@ -28,8 +28,8 @@ Because MNIST image shape is 28*28px, we will then handle 28 sequences of 28 ste
 '''
 
 # Parameters
-learning_rate = 0.01
-training_iters = 100000
+learning_rate = 0.0001
+training_iters = 10000
 batch_size = 128
 display_step = 10
 
@@ -80,7 +80,7 @@ pred = RNN(x, istate, weights, biases)
 
 cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(pred, y)) # Softmax loss
 optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost) # Adam Optimizer
-
+    
 # Evaluate model
 correct_pred = tf.equal(tf.argmax(pred,1), tf.argmax(y,1))
 accuracy = tf.reduce_mean(tf.cast(correct_pred, tf.float32))
@@ -108,7 +108,7 @@ with tf.Session() as sess:
             loss = sess.run(cost, feed_dict={x: batch_xs, y: batch_ys,
                                              istate: np.zeros((batch_size, 2*n_hidden))})
             print "Iter " + str(step*batch_size) + ", Minibatch Loss= " + "{:.6f}".format(loss) + \
-                  ", Training Accuracy= " + "{:.5f}".format(acc)
+                  ", Training Accuracy= " + "{:.5f}".format(acc),mni.train.epochs_completed
             iter.append(int(step*batch_size))
             accur.append(format(acc))
         step += 1
