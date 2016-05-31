@@ -1,30 +1,32 @@
+# Document classification using rnn
+
+
+#imports
 import input_data
 import pandas as pd
-
 import matplotlib.pyplot as plt
+
 
 accur = []
 iter = []
 
-print "Loading data"
-train_dat=pd.read_pickle('td_set');
-test_dat=pd.read_pickle('ts_set');
+print "Loading dataset"
 
-mni=input_data.read_data_sets_modified(train_dat,test_dat)
+train_dat=pd.read_pickle('td_set.pkl');# training data 
+test_dat=pd.read_pickle('ts_set.pkl');# testing data
 
 
-import tensorflow as tf
-from tensorflow.models.rnn import rnn, rnn_cell
-import numpy as np
+dc_dataset=input_data.read_data_sets_modified(train_dat,test_dat) # converting pandas dataset to DataSet CLass defined in input_data.py
 
 
 import tensorflow as tf
 from tensorflow.models.rnn import rnn, rnn_cell
 import numpy as np
+
 
 '''
-To classify images using a reccurent neural network, we consider every image row as a sequence of pixels.
-Because MNIST image shape is 28*28px, we will then handle 28 sequences of 28 steps for every sample.
+To classify images using a reccurent neural network, we consider every image row as a sequence of pixels
+Our data set consist of image of 200*200 px,we will then handle 200 sequences of 200 steps for every sample
 '''
 
 # Parameters
@@ -54,6 +56,8 @@ biases = {
     'hidden': tf.Variable(tf.random_normal([n_hidden])),
     'out': tf.Variable(tf.random_normal([n_classes]))
 }
+
+# RNN Defination 
 
 def RNN(_X, _istate, _weights, _biases):
 
